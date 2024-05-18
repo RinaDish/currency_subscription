@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/RinaDish/currency-rates/internal/clients"
 	"github.com/RinaDish/currency-rates/internal/handlers"
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
@@ -22,7 +23,10 @@ func NewApp(c Config, l *zap.SugaredLogger) *App {
 }
 
 func (app *App) Run(ctx context.Context) error {
-	h := handlers.NewRateHandler(app.l)
+	nbuClient := clients.NewNBUClient(app.l)
+	privatClient := clients.NewPrivatClient(app.l)
+
+	h := handlers.NewRateHandler(app.l, []handlers.RateClient{nbuClient, privatClient})
 
 	r := chi.NewRouter()
 	r.Get("/rate", h.GetCurrentRate)
