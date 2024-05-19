@@ -3,14 +3,15 @@ package handlers
 import (
 	"context"
 	"net/http"
+	"regexp"
 
-	"github.com/RinaDish/currency-rates/internal/repo"
 	"go.uber.org/zap"
 )
 
+var emailRegex = regexp.MustCompile(`^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$`)
+
 type Db interface {
 	SetEmail(ctx context.Context, email string) error
-	GetEmails(ctx context.Context) ([]repo.Email, error)
 }
 
 type SubscribeHandler struct {
@@ -38,6 +39,11 @@ func (h SubscribeHandler) CreateSubscription(w http.ResponseWriter, r *http.Requ
 
 	email := formData.Get("email")
 
+	if !isValidEmail(email) {
+		http.Error(w, "Invalid email", http.StatusConflict)
+		return
+	}
+	
 	err = h.r.SetEmail(r.Context(), email)
 	responseStatus := http.StatusOK
 	if err != nil {
@@ -48,12 +54,7 @@ func (h SubscribeHandler) CreateSubscription(w http.ResponseWriter, r *http.Requ
 	w.WriteHeader(responseStatus)
 }
 
-func (h SubscribeHandler) GetEmailsList(w http.ResponseWriter, r *http.Request) {
-	emails, err := h.r.GetEmails(r.Context())
-	if err != nil {
-		h.l.Error(err)
-	}
-	for _, email := range emails {
-		h.l.With("id", email.ID).Info(email.Email)
-	}
-}
+func isValidEmail(email string) bool {
+	return emailRegex.MatchString(email)
+  }
+  

@@ -58,7 +58,7 @@ func (app *App) Run(ctx context.Context) error {
 	r := chi.NewRouter()
 	r.Get("/rate", ratesHandler.GetCurrentRate)
 	r.Post("/subscribe", subscriptionHandler.CreateSubscription)
-	r.Get("/list", subscriptionHandler.GetEmailsList)
+
 	app.l.Info("app run")
 	return http.ListenAndServe(app.cfg.Address, r)
 }
