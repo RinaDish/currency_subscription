@@ -4,7 +4,6 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-	"time"
 
 	"go.uber.org/zap"
 )
@@ -15,25 +14,19 @@ type RateClient interface {
 
 type RateHandler struct {
 	l   *zap.SugaredLogger
-	rateClients []RateClient
+	rateClient RateClient
 }
 
-func NewRateHandler(l *zap.SugaredLogger, r []RateClient) RateHandler {
+func NewRateHandler(l *zap.SugaredLogger, r RateClient) RateHandler {
 
 	return RateHandler{
 		l: l,
-		rateClients: r,
+		rateClient: r,
 	}
 }
 
 func (h RateHandler) GetCurrentRate(w http.ResponseWriter, r *http.Request) {
-	var rate float64
-	var err error
-	for _, c := range h.rateClients {
-		ctx, _ := context.WithTimeout(context.Background(), 500 * time.Millisecond)
-		rate, err = c.GetDollarRate(ctx)
-		if err == nil { break }
-	}
+	rate, err := h.rateClient.GetDollarRate(context.Background())
 
 	w.Header().Set("Content-Type", "application/json")
 	if err == nil { 

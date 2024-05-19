@@ -1,4 +1,4 @@
-package main
+package services
 
 import (
 	"net/smtp"
@@ -34,9 +34,9 @@ func (m Mail) Send(to, body string) {
 		from, []string{to}, []byte(msg))
 
 	if err != nil {
-		m.l.Info("smtp error: %s", err)
+		m.l.Infof("smtp error: %s", err)
 		return
 	}
 	
-	m.l.Info("email sended to %s", to)
+	m.l.Infof("email sended to %s", to)
 }
