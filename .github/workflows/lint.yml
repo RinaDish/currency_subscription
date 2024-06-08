@@ -27,4 +27,8 @@ jobs:
           version: v1.56.0
           args: --timeout 3m
           working-directory: currency-rates/
+
+      - name: Tests
+        working-directory: currency-rates/
+        run: go test -v ./...
           
