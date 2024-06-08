@@ -13,10 +13,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Change to directory with go.mod
+        run: cd currency-rates
+
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: "currency-rates/go.mod"
+          go-version-file: "go.mod"
           check-latest: true
 
       - name: golangci-lint
