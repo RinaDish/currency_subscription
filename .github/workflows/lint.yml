@@ -12,18 +12,17 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
-      - name: Change to directory with go.mod
-        run: cd currency-rates/
-
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version-file: "go.mod"
+          go-version-file: "currency-rates/go.mod"
           check-latest: true
+
+      - name: Change to directory with go.mod
+        run: cd currency-rates/
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.56.0
-          args: currency-rates/...
+          args: --timeout 3m
