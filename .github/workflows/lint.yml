@@ -23,7 +23,7 @@ jobs:
 
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
-        working-directory: currency-rates/
         with:
           version: v1.56.0
           args: --timeout 3m
+          path: currency-rates/
