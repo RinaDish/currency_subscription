@@ -26,4 +26,4 @@ jobs:
         with:
           version: v1.56.0
           args: --timeout 3m
-          path: currency-rates/
+          working-directory: currency-rates/
