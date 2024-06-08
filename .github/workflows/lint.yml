@@ -17,13 +17,12 @@ jobs:
         with:
           go-version-file: "currency-rates/go.mod"
           check-latest: true
-
-      - name: Change to directory with go.mod
-        run: cd currency-rates/
-
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: v1.56.0
           args: --timeout 3m
           working-directory: currency-rates/
+       - name: Run tests
+        working-directory: currency-rates/
+        run: go test ./...
