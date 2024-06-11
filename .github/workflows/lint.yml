@@ -17,10 +17,7 @@ jobs:
         with:
           go-version-file: "currency-rates/go.mod"
           check-latest: true
-
-      - name: Change to directory with go.mod
-        run: cd currency-rates/
-
+          
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
