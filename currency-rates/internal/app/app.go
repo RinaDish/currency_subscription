@@ -26,7 +26,7 @@ func NewApp(c Config, l *zap.SugaredLogger) *App {
 }
 
 func (app *App) Run(ctx context.Context) error {
-	nbuClient := clients.NewNBUClient(app.l)
+	nbuClient := clients.NewNBUClient(app.l) //создаем нбу клиент
 	privatClient := clients.NewPrivatClient(app.l)
 	rateService := services.NewRate(app.l, []services.RateClient{nbuClient, privatClient})
 
